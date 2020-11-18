@@ -1,15 +1,33 @@
 <html>
-    <head>
-      {% if title %}
-      <title>{{ title }} - Microblog</title>
-      {% else %}
-      <title>Welcome to Microblog</title>
-      {% endif %}
-    </head>
-    <body>
-        <h2 style="font-size:14px"><a href="/login">login </a> | <a href="/poll"> poll
-        </a> | <a href="/home"> home</a></h2>
-        <hr>
-        {% block content %}{% endblock %}
-    </body>
+<head>
+    {% if title %}
+        <title>{{ title }} - Micropolls</title>
+    {% else %}
+        <title>Welcome to Micropolls</title>
+    {% endif %}
+</head>
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <ul class="flashes">
+            {% for message in messages %}
+                <div class="message_flash">{{ message }}</div>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+<body>
+
+<div>
+    <a href="{{ url_for('home') }}">Home</a>
+    {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('signup') }}">Sign Up</a>
+    {% else %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        <a href="{{ url_for('new_poll') }}">Create New Poll</a>
+    {% endif %}
+    <a href="{{ url_for('poll') }}">Browse Polls</a>
+</div>
+{% block content %}{% endblock %}
+</body>
 </html>
