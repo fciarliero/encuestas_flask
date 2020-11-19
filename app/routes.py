@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, session
 from werkzeug.urls import url_parse
 
 from app import app, db
-from app.forms import QuestionForm, SurveyForm, LoginForm, SignUpForm
+from app.forms import QuestionForm, SurveyForm, LoginForm, SignUpForm, MakePollForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 
@@ -26,8 +26,6 @@ def home():
 
 @app.route('/poll', methods=['GET', 'POST'])
 def poll():
-    form = QuestionForm()
-    form.options.choices = [(1,'papa'),(2,'op2')]
     form2 = SurveyForm()
     for x in range(10):
         form2.select_entries.append_entry()
@@ -40,7 +38,12 @@ def poll():
 @app.route('/new_poll', methods=['GET', 'POST'])
 @login_required
 def new_poll():
-    return "aca se va a generar una encuesta"
+    form = MakePollForm()
+    if form.validate_on_submit():
+        #agregar a la base de datos el prototipo de poll
+        #redireccionar a la pagina de adicion de questions
+        pass
+    return render_template('new_poll.html', title='create', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
