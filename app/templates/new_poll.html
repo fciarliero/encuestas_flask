@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
     <h1>Poll Creation</h1>
-    <form action="" method="post" novalidate>
+    <form action="" method="post" >
         <p>
+            {{ form.csrf_token() }}
             {{ form.name.label }}<br>
             {{ form.name(size=32) }}
             {% for error in form.name.errors %}

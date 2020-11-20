@@ -28,9 +28,10 @@ class User(UserMixin, db.Model):
 
 class Poll(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String(140))
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    expiration = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    name = db.Column(db.String(128))
+    questions = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.body)
+        return '<Post {}>'.format(self.name)

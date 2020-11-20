@@ -4,7 +4,7 @@ from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import QuestionForm, SurveyForm, LoginForm, SignUpForm, MakePollForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User
+from app.models import User, Poll
 
 
 @app.route('/')
@@ -39,7 +39,15 @@ def poll():
 @login_required
 def new_poll():
     form = MakePollForm()
-    if form.validate_on_submit():
+    if request.method == "POST" and form.validate_on_submit():
+        #user = User(username=form.username.data)
+        poll = Poll(author=current_user, name=form.name.data,expiration=form.expiration.data)
+
+        #user.set_password(form.password.data)
+        db.session.add(poll)
+        db.session.commit()
+        flash('Poll added, now make the questions')
+        return redirect(url_for('home'))
         #agregar a la base de datos el prototipo de poll
         #redireccionar a la pagina de adicion de questions
         pass
