@@ -27,27 +27,27 @@ Puntos optativos:
 Requerimientos:
 
 
-Como dueño de producto, me gustaría tener un sistema que me permita realizar encuestas.
+(X) Como dueño de producto, me gustaría tener un sistema que me permita realizar encuestas.
 
-Como dueño de producto, me gustaría que cada pregunta pueda tener una o más respuestas.
+(X) Como dueño de producto, me gustaría que cada pregunta pueda tener una o más respuestas.
 
-Como dueño de producto, me gustaría que cada pregunta pueda tener como máximo 4 respuestas.
+(X) Como dueño de producto, me gustaría que cada pregunta pueda tener como máximo 4 respuestas.
 
-Como dueño de producto, me gustaría que mi aplicación de encuestas posea un login para usuarios.
+(X) Como dueño de producto, me gustaría que mi aplicación de encuestas posea un login para usuarios.
 
-Como dueño de producto, me gustaría que los usuarios de mi aplicación puedan cargar preguntas y sus respectivas respuestas.
+(X) Como dueño de producto, me gustaría que los usuarios de mi aplicación puedan cargar preguntas y sus respectivas respuestas.
 
-Como dueño de producto, me gustaría que se puedan responder encuestas sin estar registrado en el sistema.
+(X) Como dueño de producto, me gustaría que se puedan responder encuestas sin estar registrado en el sistema.
 
-Como dueño de producto, me gustaría que solo los usuarios registrados puedan cargar encuestas.
+(X) Como dueño de producto, me gustaría que solo los usuarios registrados puedan cargar encuestas.
 
 Como dueño de producto, me gustaría poder revisar un historial de preguntas por usuario.
 
 Como dueño de producto, me gustaría poder agrupar encuestas a través de etiquetas.
 
-Como dueño de producto, me gustaría poder acceder a un listado de todas las encuestas del sistema.
+(X) Como dueño de producto, me gustaría poder acceder a un listado de todas las encuestas del sistema.
 
-Como dueño de producto, me gustaría que las encuestas tengan vencimiento.
+(X) Como dueño de producto, me gustaría que las encuestas tengan vencimiento.
 
 -------------------------------------------------------------------------------------------------
 

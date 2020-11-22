@@ -1,17 +1,21 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, FieldList, FormField, Form
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, FieldList, FormField, Form, \
+    HiddenField
 from wtforms.validators import DataRequired, EqualTo, ValidationError
 from wtforms.fields.html5 import DateField
 from app.models import User
 from datetime import date
 
 class QuestionForm(Form):
-    options = SelectField(label=u'Pregunta?', coerce=int)
+    option = SelectField(label=u'Pregunta?')
+    question = HiddenField()
 
 
 class SurveyForm(FlaskForm):
     select_entries = FieldList(FormField(QuestionForm))
+    name = StringField()
     submit = SubmitField('Answer')
+
 
 
 class MakeQuestionForm(FlaskForm):

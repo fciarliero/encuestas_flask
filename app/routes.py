@@ -17,29 +17,35 @@ def home():
 def get_option_list(question):
     options = []
     if question.option1 != '':
-        options.append((1, question.option1))
+        options.append((question.option1, question.option1))
     if question.option2 != '':
-        options.append((2, question.option2))
+        options.append((question.option2, question.option2))
     if question.option3 != '':
-        options.append((3, question.option3))
+        options.append((question.option3, question.option3))
     if question.option4 != '':
-        options.append((4, question.option4))
+        options.append((question.option4, question.option4))
     return options
 
 
 @app.route('/poll/<id>', methods=['GET', 'POST'])
 @app.route('/poll')
 def poll(id):
+    form = SurveyForm()
     current_poll = Poll.query.filter_by(id=id).first()
     if current_poll:
-        questions = Question.query.filter_by(parent=id).all()
-        form = SurveyForm()
-        for question in questions:
-            form.select_entries.append_entry()
-            option_list = get_option_list(question)
-            form.select_entries[-1].options.choices = option_list
-            form.select_entries[-1].options.label = question.name
-        return render_template('survey.html', form=form, title=current_poll.name)
+        if request.method == "POST":
+            #send answer to DB
+            flash('Poll Answer submitted')
+            return redirect(url_for('home'))
+        else:
+            questions = Question.query.filter_by(parent=id).all()
+            for question in questions:
+                form.select_entries.append_entry()
+                option_list = get_option_list(question)
+                form.select_entries[-1].option.choices = option_list
+                form.select_entries[-1].option.label = question.name
+                form.select_entries[-1]['question'].data = question.name
+            return render_template('survey.html', form=form, title=current_poll.name)
     else:
         print('no hay poll')
 

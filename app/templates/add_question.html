@@ -77,6 +77,13 @@
         </p>
         <p>
             {{ form.submit }}
+            <button id="myButton" class="float-left submit-button" >Finish</button>
+
+            <script type="text/javascript">
+                document.getElementById("myButton").onclick = function () {
+                    location.href = "{{ url_for('home') }}";
+                };
+            </script>
         </p>
     </form>
 {% endblock %}

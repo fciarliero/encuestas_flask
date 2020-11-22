@@ -4,8 +4,9 @@
     <form action="" method="post" novalidate>
     {%for pregunta in form.select_entries %}
         <p>
-            {{ pregunta.options.label }}<br>
-            {{ pregunta.options }}
+            {{ pregunta.option.label }}<br>
+            {{ pregunta.option }}
+            {{ pregunta.question }}
         </p>
 
     {% endfor %}
