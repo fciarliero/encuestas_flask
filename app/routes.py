@@ -14,17 +14,34 @@ def home():
     return render_template('home.html', title='polls', polls=polls)
 
 
+def get_option_list(question):
+    options = []
+    if question.option1 != '':
+        options.append((1, question.option1))
+    if question.option2 != '':
+        options.append((2, question.option2))
+    if question.option3 != '':
+        options.append((3, question.option3))
+    if question.option4 != '':
+        options.append((4, question.option4))
+    return options
+
+
 @app.route('/poll/<id>', methods=['GET', 'POST'])
 @app.route('/poll')
 def poll(id):
-    hola = id
-    form2 = SurveyForm()
-    for x in range(10):
-        form2.select_entries.append_entry()
-    for subform in form2.select_entries:
-        subform.options.choices=[(1, 'papfaa'), (2, 'opaf2')]
-        subform.options.label='chupala putito'
-    return render_template('survey.html', form = form2)
+    current_poll = Poll.query.filter_by(id=id).first()
+    if current_poll:
+        questions = Question.query.filter_by(parent=id).all()
+        form = SurveyForm()
+        for question in questions:
+            form.select_entries.append_entry()
+            option_list = get_option_list(question)
+            form.select_entries[-1].options.choices = option_list
+            form.select_entries[-1].options.label = question.name
+        return render_template('survey.html', form=form, title=current_poll.name)
+    else:
+        print('no hay poll')
 
 
 @app.route('/new_poll', methods=['GET', 'POST'])
@@ -51,7 +68,7 @@ def add_questions(poll_id):
         if form.validate_on_submit():
             question = Question(mother=current_poll, name=form.name.data, option1=form.option1.data,
                                 option2=form.option2.data, option3=form.option3.data, option4=form.option4.data,
-                                correct_answer=form.correct_answer.data)
+                                correct_answer=form.data[form.correct_answer.data])
             db.session.add(question)
             db.session.commit()
             flash('Question added!')
