@@ -66,5 +66,5 @@ class SignUpForm(FlaskForm):
 
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
-        if user is not None:
+        if user is not None or username.data == 'anon':
             raise ValidationError('Please use a different username.')

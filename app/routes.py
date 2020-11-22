@@ -30,7 +30,16 @@ def get_option_list(question):
 def save_answer(form, poll_id):
     for answer in form.select_entries.data:
         question = Question.query.filter_by(id=answer['question']).first()
-        submitted_answer = Answer(answerer=current_user, src_question=question, result=answer['option'])
+        if current_user.is_active:
+            submitted_answer = Answer(answerer=current_user, src_question=question, result=answer['option'])
+        else:
+            user = User.query.filter_by(username='anon').first()
+            if user is None:
+                u = User(username='anon')
+                db.session.add(u)
+                db.session.commit()
+                user = User.query.filter_by(username='anon').first()
+            submitted_answer = Answer(answerer=user, src_question=question, result=answer['option'])
         db.session.add(submitted_answer)
         db.session.commit()
 
