@@ -47,6 +47,7 @@ def add_questions(poll_id):
     current_poll = Poll.query.filter_by(author=current_user,id=poll_id).first()
     form = MakeQuestionForm()
     if current_poll:
+        questions = Question.query.filter_by(parent=poll_id).all()
         if form.validate_on_submit():
             question = Question(mother=current_poll, name=form.name.data, option1=form.option1.data,
                                 option2=form.option2.data, option3=form.option3.data, option4=form.option4.data,
@@ -55,7 +56,7 @@ def add_questions(poll_id):
             db.session.commit()
             flash('Question added!')
             return redirect(url_for('add_questions', poll_id=poll_id))
-        return render_template('add_question.html', title='Add A Question', form=form)
+        return render_template('add_question.html', title='Add A Question', form=form, questions=questions)
     else:
         #error
         print('poll not found, F.')

@@ -2,10 +2,37 @@
 {% block content %}
     <h1>Add A Question</h1>
 
-    {% if form.errors %}
+{% if form.errors %}
 {{ form.errors }}
 {% endif %}
+    {% if questions.__len__() > 0 %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Correct Answer</th>
+                <th>Option 1</th>
+                <th>Option 2</th>
+                <th>Option 3</th>
+                <th>Option 4</th>
+                <th>Edit</th>
+            </tr>
 
+            {% for question in questions %}
+                <TR>
+                    <TD class="c1">{{ question.id }}</TD>
+                    <TD class="c2">{{ question.name }}</TD>
+                    <TD class="c3"><SPAN>{{ question.correct_answer }}</SPAN></TD>
+                    <TD class="c4">{{ question.option1 }}</TD>
+                    <TD class="c5">{{ question.option2 }}</TD>
+                    <TD class="c6">{{ question.option3 }}</TD>
+                    <TD class="c7">{{ question.option4 }}</TD>
+                    <TD class="c4"><SPAN><a href="{{ url_for('home') }}">Remove</a></SPAN></TD>
+
+                </TR>
+            {% endfor %}
+        </table>
+    {% endif %}
     <form action="" method="post" >
         {{ form.csrf_token() }}
         <p>
