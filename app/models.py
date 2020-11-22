@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import db, login
 from flask_login import UserMixin
@@ -12,9 +14,9 @@ def load_user(id):
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    posts = db.relationship('Poll', backref='author', lazy='dynamic')
+    polls = db.relationship('Poll', backref='author', lazy='dynamic')
+    question_answers = db.relationship('Answer', backref='answerer', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -34,7 +36,7 @@ class Poll(db.Model):
     questions = db.relationship('Question', backref='mother', lazy='dynamic')
 
     def __repr__(self):
-        return '<Post {}>'.format(self.name)
+        return '<Poll {}>'.format(self.name)
 
 
 class Question(db.Model):
@@ -46,6 +48,18 @@ class Question(db.Model):
     option4 = db.Column(db.String(128))
     correct_answer = db.Column(db.String(128))
     parent = db.Column(db.Integer, db.ForeignKey('poll.id'))
+    answers = db.relationship('Answer', backref='src_question', lazy='dynamic')
+        #db.Column(db.Integer, db.ForeignKey('answer.id'))
 
     def __repr__(self):
-        return '<Post {}>'.format(self.name)
+        return '<Question {}>'.format(self.name)
+
+
+class Answer(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    question = db.Column(db.Integer, db.ForeignKey('question.id'))
+    result = db.Column(db.String(128))
+
+    def __repr__(self):
+        return '<Answer {}>'.format(self.result)

@@ -4,7 +4,7 @@ from werkzeug.urls import url_parse
 from app import app, db
 from app.forms import QuestionForm, SurveyForm, LoginForm, SignUpForm, MakePollForm, MakeQuestionForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Poll, Question
+from app.models import User, Poll, Question, Answer
 from datetime import date
 
 @app.route('/')
@@ -27,6 +27,14 @@ def get_option_list(question):
     return options
 
 
+def save_answer(form, poll_id):
+    for answer in form.select_entries.data:
+        question = Question.query.filter_by(id=answer['question']).first()
+        submitted_answer = Answer(answerer=current_user, src_question=question, result=answer['option'])
+        db.session.add(submitted_answer)
+        db.session.commit()
+
+
 @app.route('/poll/<id>', methods=['GET', 'POST'])
 @app.route('/poll')
 def poll(id):
@@ -34,7 +42,7 @@ def poll(id):
     current_poll = Poll.query.filter_by(id=id).first()
     if current_poll:
         if request.method == "POST":
-            #send answer to DB
+            save_answer(form, id)
             flash('Poll Answer submitted')
             return redirect(url_for('home'))
         else:
@@ -44,7 +52,7 @@ def poll(id):
                 option_list = get_option_list(question)
                 form.select_entries[-1].option.choices = option_list
                 form.select_entries[-1].option.label = question.name
-                form.select_entries[-1]['question'].data = question.name
+                form.select_entries[-1]['question'].data = question.id
             return render_template('survey.html', form=form, title=current_poll.name)
     else:
         print('no hay poll')

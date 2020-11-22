@@ -77,13 +77,15 @@
         </p>
         <p>
             {{ form.submit }}
-            <button id="myButton" class="float-left submit-button" >Finish</button>
+            {% if questions.__len__() > 0 %}
+                <button id="myButton" class="float-left submit-button" >Finish</button>
 
-            <script type="text/javascript">
-                document.getElementById("myButton").onclick = function () {
-                    location.href = "{{ url_for('home') }}";
-                };
-            </script>
+                <script type="text/javascript">
+                    document.getElementById("myButton").onclick = function () {
+                        location.href = "{{ url_for('home') }}";
+                    };
+                </script>
+            {% endif %}
         </p>
     </form>
 {% endblock %}

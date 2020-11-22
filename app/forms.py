@@ -17,7 +17,6 @@ class SurveyForm(FlaskForm):
     submit = SubmitField('Answer')
 
 
-
 class MakeQuestionForm(FlaskForm):
     name = StringField('Question:', validators=[DataRequired()])
     option1 = StringField('Option 1:')
