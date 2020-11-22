@@ -14,17 +14,24 @@ class SurveyForm(FlaskForm):
     submit = SubmitField('Answer')
 
 
-class MakeQuestionForm(Form):
+class MakeQuestionForm(FlaskForm):
     name = StringField('Question:', validators=[DataRequired()])
     option1 = StringField('Option 1:')
     option2 = StringField('Option 2:')
     option3 = StringField('Option 3:')
     option4 = StringField('Option 4:')
+    correct_answer = SelectField(label='Answer', choices=[('option1', 'Option 1'), ('option2', 'Option 2'),
+                                                          ['option3', 'Option 3'], ('option4', 'Option 4')])
     submit = SubmitField('Add Question')
 
     def validate_option1(self, option1):
-        if self.option1 is None and self.option2 is None and self.option3 is None and self.option4 is None:
-            raise ValidationError('At least input 1 option ffs.')
+        if self.option1.data == '' and self.option2.data == '' and self.option3.data == '' and self.option4.data == '':
+            raise ValidationError('Set at least one option.')
+
+    def validate_correct_answer(self,correct_answer):
+        if self.data[correct_answer.data] == '':
+            raise ValidationError('The correct answer must be a valid option')
+        pass
 
 
 class MakePollForm(FlaskForm):

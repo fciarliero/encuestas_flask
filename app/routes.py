@@ -2,30 +2,22 @@ from flask import render_template, flash, redirect, url_for, request, session
 from werkzeug.urls import url_parse
 
 from app import app, db
-from app.forms import QuestionForm, SurveyForm, LoginForm, SignUpForm, MakePollForm
+from app.forms import QuestionForm, SurveyForm, LoginForm, SignUpForm, MakePollForm, MakeQuestionForm
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Poll
-
+from app.models import User, Poll, Question
+from datetime import date
 
 @app.route('/')
 @app.route('/home')
 def home():
-    user = {'username': 'Miguel'}
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('home.html', title='Home', user=user, posts=posts)
+    polls = Poll.query.filter(Poll.expiration > date.today()).all()
+    return render_template('home.html', title='polls', polls=polls)
 
 
-@app.route('/poll', methods=['GET', 'POST'])
-def poll():
+@app.route('/poll/<id>', methods=['GET', 'POST'])
+@app.route('/poll')
+def poll(id):
+    hola = id
     form2 = SurveyForm()
     for x in range(10):
         form2.select_entries.append_entry()
@@ -40,18 +32,34 @@ def poll():
 def new_poll():
     form = MakePollForm()
     if request.method == "POST" and form.validate_on_submit():
-        #user = User(username=form.username.data)
         poll = Poll(author=current_user, name=form.name.data,expiration=form.expiration.data)
-
-        #user.set_password(form.password.data)
         db.session.add(poll)
         db.session.commit()
-        flash('Poll added, now make the questions')
-        return redirect(url_for('home'))
-        #agregar a la base de datos el prototipo de poll
-        #redireccionar a la pagina de adicion de questions
-        pass
+        flash('Poll added, now add questions')
+        return redirect(url_for('add_questions', poll_id=poll.id))
     return render_template('new_poll.html', title='create', form=form)
+
+
+@app.route('/add_questions/<poll_id>', methods=['GET', 'POST'])
+@app.route('/add_questions')
+@login_required
+def add_questions(poll_id):
+    current_poll = Poll.query.filter_by(author=current_user,id=poll_id).first()
+    form = MakeQuestionForm()
+    if current_poll:
+        if form.validate_on_submit():
+            question = Question(mother=current_poll, name=form.name.data, option1=form.option1.data,
+                                option2=form.option2.data, option3=form.option3.data, option4=form.option4.data,
+                                correct_answer=form.correct_answer.data)
+            db.session.add(question)
+            db.session.commit()
+            flash('Question added!')
+            return redirect(url_for('add_questions', poll_id=poll_id))
+        return render_template('add_question.html', title='Add A Question', form=form)
+    else:
+        #error
+        print('poll not found, F.')
+        pass
 
 
 @app.route('/login', methods=['GET', 'POST'])

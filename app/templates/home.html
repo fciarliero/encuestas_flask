@@ -1,8 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Hi, {{ user.username }}!</h1>
-    {% for post in posts %}
-    <div><p>{{ post.author.username }} says: <b>{{ post.body }}</b></p></div>
-    {% endfor %}
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Expiration Date</th>
+                <th>Answer</th>
+            </tr>
+
+            {% for poll in polls %}
+                <TR>
+                    <TD class="c1">{{ poll.id }}</TD>
+                    <TD class="c2">{{ poll.name }}</TD>
+                    <TD class="c3"><SPAN>{{ poll.expiration.date() }}</SPAN></TD>
+                    <TD class="c4"><SPAN><a href="{{ url_for('poll', id=poll.id) }}">Answer</a></SPAN></TD>
+
+                </TR>
+            {% endfor %}
+        </table>
 {% endblock %}

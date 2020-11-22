@@ -30,8 +30,22 @@ class Poll(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     expiration = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     name = db.Column(db.String(128))
-    questions = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    questions = db.relationship('Question', backref='mother', lazy='dynamic')
+
+    def __repr__(self):
+        return '<Post {}>'.format(self.name)
+
+
+class Question(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(128))
+    option1 = db.Column(db.String(128))
+    option2 = db.Column(db.String(128))
+    option3 = db.Column(db.String(128))
+    option4 = db.Column(db.String(128))
+    correct_answer = db.Column(db.String(128))
+    parent = db.Column(db.Integer, db.ForeignKey('poll.id'))
 
     def __repr__(self):
         return '<Post {}>'.format(self.name)
