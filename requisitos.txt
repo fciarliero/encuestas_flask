@@ -41,7 +41,7 @@ Requerimientos:
 
 (X) Como dueño de producto, me gustaría que solo los usuarios registrados puedan cargar encuestas.
 
-Como dueño de producto, me gustaría poder revisar un historial de preguntas por usuario.
+(-) Como dueño de producto, me gustaría poder revisar un historial de preguntas por usuario.
 
 Como dueño de producto, me gustaría poder agrupar encuestas a través de etiquetas.
 
